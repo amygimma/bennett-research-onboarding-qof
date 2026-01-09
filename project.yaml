@@ -1,0 +1,10 @@
+version: '4.0'
+
+actions:
+  generate_dataset:
+    run: >
+      ehrql:v1 generate-dataset analysis/dataset_definition.py
+      --output output/dataset.csv
+    outputs:
+      highly_sensitive:
+        dataset: output/dataset.csv

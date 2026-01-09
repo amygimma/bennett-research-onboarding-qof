@@ -1,0 +1,21 @@
+{
+    "issues": [
+      {
+        "title": "Task 1: Create a dataset defintion using the diabetes QOF rules",
+        "file": "01-dataset-definition.md"
+      },
+      {
+        "title": "Task 2: Write tests for your dataset",
+        "file": "02-assure.md"
+      },
+      {
+        "title": "Task 3: Calculate monthly prevalence",
+        "file": "03-calculate.md"
+      },
+      {
+        "title": "Task 4: Visualise your results",
+        "file": "04-visualise.md"
+      }
+    ]
+  }
+  
