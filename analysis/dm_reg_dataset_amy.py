@@ -47,7 +47,6 @@ latest_dm = (
 # identify latest dm resolution
 latest_dmres = (
     prev_clin_events
-    # Q: why do both prev_clin_events and clinical events work?
     .where(clinical_events.snomedct_code.is_in(dmres_codelist))
     .sort_by(clinical_events.date)
     .last_for_patient()
@@ -70,7 +69,7 @@ dm_reg_r1 = (
  )
 
 # rule 2
-dm_reg_r2 = is_alive & is_17_or_over
+dm_reg_r2 = is_alive & is_17_or_over & has_registration
 
 # Create dataset ---- 
 dataset = create_dataset()

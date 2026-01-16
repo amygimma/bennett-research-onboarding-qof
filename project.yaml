@@ -3,7 +3,9 @@ version: '4.0'
 actions:
   generate_dataset:
     run: >
-      ehrql:v1 generate-dataset analysis/dm_reg_dataset_amy.py
+      ehrql:v1 generate-dataset 
+      analysis/dm_reg_dataset_amy.py
+      --test-data-file analysis/test_dm_reg_dataset_amy.py
       --output output/dataset.csv.gz
     outputs:
       highly_sensitive:
