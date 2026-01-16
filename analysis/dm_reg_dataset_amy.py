@@ -14,7 +14,7 @@ dmres_codelist = codelist_from_csv(
     column="code"
 )
 
-# Create data to assess eligibility against rules ----
+# Create data objects to assess eligibility against rules ----
 
 # establish patient is registered
 has_registration = (
@@ -38,10 +38,8 @@ prev_clin_events = (
 # identify latest DM dx
 latest_dm = (
     prev_clin_events
-    # Q: why do both prev_clin_events and clinical events work?
     .where(prev_clin_events.snomedct_code.is_in(dm_codelist))
     .sort_by(prev_clin_events.date)
-    # Q. What are the object class and attributes after last_for_patient?
     .last_for_patient()
     .date
 )
@@ -58,12 +56,20 @@ latest_dmres = (
 
 # Define rules ----
 
+# Rule 1: Pass to the next rule all patients from the specified population who meet both of the criteria below and reject the remaining patients.
+# - Have a diabetes diagnosis in the patient record up to and including the achievement date.
+# - Latest diabetes diagnosis is not followed by a diabetes resolved code.
+
+# Rule 2: Reject patients passed to this rule who are aged under 17 years old on the achievement date. Select the remaining patients.
+
+# rule 1
 dm_reg_r1 = (
     latest_dm.is_not_null() & (
         latest_dmres.is_null() | (latest_dmres < latest_dm)
     )
  )
 
+# rule 2
 dm_reg_r2 = is_alive & is_17_or_over
 
 # Create dataset ---- 
@@ -74,55 +80,3 @@ dataset.define_population(dm_reg_r1 & dm_reg_r2)
 dataset.dmlat_dat = latest_dm
 dataset.dmres_dat = latest_dmres
 dataset.pat_age = patients.age_on(index_date)
-
-# show(dataset)
-
-
-
-# Code for more questions
-# # dm_dx = (
-# #     clinical_events
-# #     .snomedct_code
-# #     .is_in(dm_codelist)
-# #     .exists_for_patient()
-# # )
-
-# latest_dm_dx= (
-#     clinical_events
-#     .where(
-#         (clinical_events.date <= index_date) 
-#         & ((clinical_events.snomedct_code.is_in(dm_codelist))
-#         | clinical_events.snomedct_code.is_in(dmres_codelist))
-#         )
-#     .sort_by(clinical_events.date)
-#     .last_for_patient()
-#     .where(clinical_events.snomedct_code.is_in(dm_codelist))
-    
-# )
-
-# current_dm_dx = latest_dm_dx
-
-# show(latest_dm_dx)
-
-# latest_unres_dm_dx_date = (
-#     clinical_events.where(
-#         clinical_events.date
-#         clinical_events.date.is_on_or_before(index_date)
-#     )
-#     .except_where(clinical_events.snomedct_code.is_in(dmres_codelist))  
-# )
-
-# show(dm_dx)
-# dataset = create_dataset()
-# dataset.sex = patients.sex
-
-# dataset.define_population(
-#     has_registration 
-#     & is_17_or_over
-#     & is_alive
-# )
-    
-
-# show(
-#     dataset
-# )
