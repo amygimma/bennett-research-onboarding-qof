@@ -6,7 +6,16 @@ actions:
       ehrql:v1 generate-dataset 
       analysis/dm_reg_dataset_amy.py
       --test-data-file analysis/test_dm_reg_dataset_amy.py
-      --output output/dataset.csv.gz
+
+      --output output/dataset.csv
     outputs:
       highly_sensitive:
-        dataset: output/dataset.csv.gz
+        dataset: output/dataset.csv
+  generate_dm_measures:
+    run: >
+      ehrql:v1 generate-measures analysis/dm_reg_measures.py
+      --output output/unresolved_dm_measures.csv
+    outputs:
+      moderately_sensitive:
+        measure: output/unresolved_dm_measures.csv
+
