@@ -57,8 +57,6 @@ patients_eligible = is_alive_during_interval & is_17_or_over_by_interval_start &
 # rule 1 and 2
 eligible_patients_with_unresolved_dm = patients_with_unresolved_dm & patients_eligible
 
-
-
 # Age groups
 patients.age = patients.age_on(INTERVAL.start_date)
 patients.age_band = case(
@@ -69,7 +67,6 @@ patients.age_band = case(
     when(patients.age >= 80).then("80+"),
     otherwise="missing",
 )
-
 
 # Set up measures object ----
 measures = create_measures()

@@ -6,7 +6,6 @@ actions:
       ehrql:v1 generate-dataset 
       analysis/dm_reg_dataset_amy.py
       --test-data-file analysis/test_dm_reg_dataset_amy.py
-
       --output output/dataset.csv
     outputs:
       highly_sensitive:
@@ -17,5 +16,12 @@ actions:
       --output output/unresolved_dm_measures.csv
     outputs:
       moderately_sensitive:
-        measure: output/unresolved_dm_measures.csv
+        dataset: output/unresolved_dm_measures.csv
+  visualise_measures:
+    run: >
+      r:latest analysis/visualise_measures.R --output output/plots/*
+    needs: [generate_dm_measures]
+    outputs:
+      moderately_sensitive:
+        plots: output/plots/histogram_unresolved_dm*.png
 
